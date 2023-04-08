@@ -23,6 +23,7 @@
 		<jakarta-servlet.version>6.0.0</jakarta-servlet.version>
 		<jwwt.version>0.11.5</jwwt.version>
 		<bitbucket.version>0.9.3</bitbucket.version>
+		<querydsl.version>5.0.0</querydsl.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -119,6 +120,19 @@
 			<artifactId>jose4j</artifactId>
 			<version>${bitbucket.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.querydsl</groupId>
+			<artifactId>querydsl-apt</artifactId>
+			<version>${querydsl.version}</version>
+			<classifier>jakarta</classifier>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.querydsl</groupId>
+			<artifactId>querydsl-jpa</artifactId>
+			<version>${querydsl.version}</version>
+			<classifier>jakarta</classifier>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -193,6 +207,22 @@
 					<outputFileName>openapi.yaml</outputFileName>
 					<outputDir>${project.build.directory}</outputDir>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.mysema.maven</groupId>
+				<artifactId>apt-maven-plugin</artifactId>
+				<version>1.1.3</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>process</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>target/generated-sources/java</outputDirectory>
+							<processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
