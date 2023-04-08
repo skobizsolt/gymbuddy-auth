@@ -9,9 +9,7 @@ import com.gymbuddy.auth.persistence.domain.User;
 import com.gymbuddy.auth.persistence.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -33,7 +31,6 @@ public class DefaultUserService implements UserService {
      * {@inheritDoc}
      */
     @Override
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public List<MinimalUserDto> getAllUsers() {
         return usersMapper.toMinimalUserDtoList(userRepository.findAll());
     }
@@ -42,7 +39,6 @@ public class DefaultUserService implements UserService {
      * {@inheritDoc}
      */
     @Override
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN') or hasUser(#userId)")
     public UserDto getUserById(final Long userId) {
         final User user = getUserEntityById(userId);
         return usersMapper.toUserDto(user);
@@ -52,8 +48,6 @@ public class DefaultUserService implements UserService {
      * {@inheritDoc}
      */
     @Override
-    @Transactional
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN') or hasUser(#userId)")
     public void deleteUser(final Long userId) {
         final User user = getUserEntityById(userId);
         // delete all user transactions
@@ -65,7 +59,6 @@ public class DefaultUserService implements UserService {
      * {@inheritDoc}
      */
     @Override
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN') or hasUser(#userId)")
     public UserDto updateUser(final Long userId, final UpdateUserDto updateUserDto) {
         final User user = getUserEntityById(userId);
         //updating user

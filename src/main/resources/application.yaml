@@ -8,8 +8,8 @@ spring:
 
   datasource:
     url: jdbc:postgresql://localhost:5432/gymbuddy
-    username: skb
-    password: 12345
+    username: ${DB_USER}
+    password: ${DB_PWD}
     driver-class-name: org.postgresql.Driver
 
   sql:

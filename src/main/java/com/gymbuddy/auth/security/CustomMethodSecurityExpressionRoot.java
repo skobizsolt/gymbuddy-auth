@@ -22,9 +22,10 @@ public class CustomMethodSecurityExpressionRoot extends SecurityExpressionRoot i
      * checks if the authenticated user have access to the user detail with the id
      * Only a user have access to his own user details or an admin
      */
-    public boolean hasUser(final Long userId, final Authentication authentication) {
+    public boolean hasUser(final Long userId) {
+        String authenticatedUserName = this.getAuthentication().getName();
         final User user = this.userService.getUserEntityById(userId);
-        return authentication.getName().equals(user.getUsername()) || user.getRole() == AuthRoles.ADMIN;
+        return authenticatedUserName.equals(user.getUsername()) || user.getRole() == AuthRoles.ADMIN;
     }
 
     // We need this setter method to set the UserService from another class

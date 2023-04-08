@@ -10,6 +10,8 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,6 +32,7 @@ public class UserController {
      *
      * @return 200 OK.
      */
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping
     @Operation(summary = "List all users data", security = {@SecurityRequirement(name = "token")})
     public ResponseEntity<List<MinimalUserDto>> getUsers() {
@@ -43,6 +46,7 @@ public class UserController {
      * @param userId refers to the user's identity.
      * @return with UserDto, containing User, Profile and Address data.
      */
+    @PreAuthorize("hasAnyRole('ROLE_USER') or hasUser(#userId)")
     @GetMapping(value = "/{userId}/profile", name = "getUser")
     @Operation(summary = "List all user specific data to profile page", security = {@SecurityRequirement(name = "token")})
     public ResponseEntity<UserDto> getAllUserData(@PathVariable final Long userId) {
@@ -56,6 +60,7 @@ public class UserController {
      * @param userId for selecting what user should be deleted.
      * @return 200 OK.
      */
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN') or hasUser(#userId)")
     @PutMapping(value = "/{userId}/profile", name = "updateUser")
     @Operation(summary = "Update user profile and address", security = {@SecurityRequirement(name = "token")})
     public ResponseEntity<UserDto> updateProfile(@PathVariable final Long userId,
@@ -70,6 +75,8 @@ public class UserController {
      * @param userId for selecting what user should be deleted.
      * @return 200 OK.
      */
+    @Transactional
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN') or hasUser(#userId)")
     @DeleteMapping(value = "/{userId}")
     @Operation(summary = "Delete user", security = {@SecurityRequirement(name = "token")})
     public ResponseEntity<Void> deleteUser(@PathVariable final Long userId) {
