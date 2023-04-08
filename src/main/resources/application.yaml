@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: gymbuddy-auth
   jpa:
     hibernate:
       ddl-auto: create
@@ -27,7 +29,7 @@ spring:
           starttls:
             enable: true
           auth: true
-    host: smtp.gmail.com
+    host: ${MAILER_HOST}
     username: ${MAILER_EMAIL}
     password: ${MAILER_PWD}
     port: 587

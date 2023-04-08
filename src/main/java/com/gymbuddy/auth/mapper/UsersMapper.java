@@ -6,17 +6,16 @@ import com.gymbuddy.auth.dto.user.MinimalUserDto;
 import com.gymbuddy.auth.dto.user.UpdateUserDto;
 import com.gymbuddy.auth.dto.user.UserDto;
 import com.gymbuddy.auth.persistence.domain.User;
-import org.mapstruct.AfterMapping;
-import org.mapstruct.IterableMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.Named;
+import org.mapstruct.*;
 
 import java.time.LocalDate;
 import java.util.List;
 
-@Mapper(componentModel = "spring", imports = LocalDate.class)
+@Mapper(
+        componentModel = "spring",
+        imports = LocalDate.class,
+        unmappedTargetPolicy = ReportingPolicy.IGNORE
+)
 public interface UsersMapper {
     @Named("userDtoMapper")
     UserDto toUserDto(User user);

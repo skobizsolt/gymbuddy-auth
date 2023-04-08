@@ -9,14 +9,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 class AuthApplicationTests {
 
-	private final ApplicationContext context;
+    private final ApplicationContext context;
 
-	AuthApplicationTests(ApplicationContext context) {
-		this.context = context;
-	}
+    AuthApplicationTests(ApplicationContext context) {
+        this.context = context;
+    }
 
-	@Test
-	void contextLoads() {
-		assertEquals("application", context.getId());
-	}
+    @Test
+    void contextLoads() {
+        assertEquals("gymbuddy-auth", context.getId());
+    }
 }

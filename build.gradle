@@ -52,3 +52,5 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+description = 'gymbuddy-auth'
