@@ -1,0 +1,45 @@
+spring:
+  application:
+    name: gymbuddy-auth
+  jpa:
+    hibernate:
+      ddl-auto: create
+    defer-datasource-initialization: true
+    show-sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/gymbuddy
+    username: ${DB_USER}
+    password: ${DB_PWD}
+    driver-class-name: org.postgresql.Driver
+
+  sql:
+    init:
+      mode: always
+
+  mvc:
+    format:
+      date-time: iso
+
+  mail:
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+          auth: true
+    host: ${MAILER_HOST}
+    username: ${MAILER_EMAIL}
+    password: ${MAILER_PWD}
+    port: 587
+
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui-gymbuddy.html
+
+server:
+  port: 8080
