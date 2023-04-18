@@ -11,8 +11,10 @@ import com.gymbuddy.auth.exception.ServiceExpection;
 import com.gymbuddy.auth.mapper.UsersMapper;
 import com.gymbuddy.auth.persistence.domain.User;
 import com.gymbuddy.auth.persistence.domain.auth.AuthenticationToken;
+import com.gymbuddy.auth.persistence.query.TokenEntityMapper;
+import com.gymbuddy.auth.persistence.query.UserEntityMapper;
+import com.gymbuddy.auth.persistence.repository.TokenRepository;
 import com.gymbuddy.auth.persistence.repository.UserRepository;
-import com.gymbuddy.auth.persistence.repository.auth.TokenRepository;
 import com.gymbuddy.auth.util.AuthMessage;
 import com.gymbuddy.auth.util.EmailType;
 import com.gymbuddy.auth.util.ServerUtils;
@@ -40,11 +42,15 @@ public class DefaultAuthenticationService implements AuthenticationService {
     @Autowired
     private final TokenRepository tokenRepository;
     @Autowired
+    private final TokenEntityMapper tokenEntityMapper;
+    @Autowired
     private final PasswordEncoder passwordEncoder;
     @Autowired
     private final UsersMapper usersMapper;
     @Autowired
     private final UserRepository userRepository;
+    @Autowired
+    private UserEntityMapper userEntityMapper;
     @Autowired
     private final MailService mailService;
     @Autowired
@@ -114,10 +120,10 @@ public class DefaultAuthenticationService implements AuthenticationService {
     @Override
     public ResponseEntity<String> resetPassword(final PasswordDto passwordDto,
                                                 final HttpServletRequest httpServletRequest) {
-        final User user = userRepository.getUsersByEmail(passwordDto.getEmail())
+        final User user = userEntityMapper.getUsersByEmail(passwordDto.getEmail())
                 .orElseThrow(() -> new ServiceExpection(Errors.USER_NOT_FOUND));
         final AuthenticationToken existingPasswordToken =
-                tokenRepository.findTokenByUserId(
+                tokenEntityMapper.getUserRelatedToken(
                         user.getUserId(), TokenType.PASSWORD.name()).orElse(null);
         //Token not exist
         if (existingPasswordToken == null) {
@@ -176,7 +182,7 @@ public class DefaultAuthenticationService implements AuthenticationService {
      */
     @Override
     public ResponseEntity<String> changeExistingPassword(final PasswordDto passwordDto) {
-        final User user = userRepository.getUsersByEmail(passwordDto.getEmail()).orElse(null);
+        final User user = userEntityMapper.getUsersByEmail(passwordDto.getEmail()).orElse(null);
         if (user == null) {
             throw new ServiceExpection(Errors.USER_NOT_FOUND);
         }
@@ -197,7 +203,7 @@ public class DefaultAuthenticationService implements AuthenticationService {
 
     @Override
     public ResponseEntity<TokenDto> login(final LoginDto loginDto) {
-        final User user = userRepository.getUsersByUsername(loginDto.getUsername())
+        final User user = userEntityMapper.getUsersByUsername(loginDto.getUsername())
                 .orElseThrow(() -> new ServiceExpection(Errors.USER_NOT_FOUND));
         checkIfGivenPassword(loginDto.getPassword(), user.getPassword());
         final String jwtToken = TokenUtils.createJwtToken(user);
@@ -231,7 +237,7 @@ public class DefaultAuthenticationService implements AuthenticationService {
     }
 
     private AuthenticationToken getToken(final String token, final TokenType tokenType) {
-        return tokenRepository.findByToken(token, tokenType.name()).orElse(null);
+        return tokenEntityMapper.getToken(token, tokenType.name()).orElse(null);
     }
 
     private ResponseEntity<String> changePassword(final User user, final String newPassword) {

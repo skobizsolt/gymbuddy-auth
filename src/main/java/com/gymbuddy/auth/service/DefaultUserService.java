@@ -6,6 +6,7 @@ import com.gymbuddy.auth.dto.user.UserDto;
 import com.gymbuddy.auth.exception.ServiceExpection;
 import com.gymbuddy.auth.mapper.UsersMapper;
 import com.gymbuddy.auth.persistence.domain.User;
+import com.gymbuddy.auth.persistence.query.UserEntityMapper;
 import com.gymbuddy.auth.persistence.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,8 @@ public class DefaultUserService implements UserService {
 
     @Autowired
     private final UserRepository userRepository;
+    @Autowired
+    private final UserEntityMapper userEntityMapper;
     @Autowired
     private final UsersMapper usersMapper;
 
@@ -63,7 +66,7 @@ public class DefaultUserService implements UserService {
         final User user = getUserEntityById(userId);
         //updating user
         usersMapper.modifyUser(updateUserDto, user);
-        userRepository.saveAndFlush(user);
+        userRepository.save(user);
         return usersMapper.toUserDto(user);
     }
 
@@ -72,7 +75,7 @@ public class DefaultUserService implements UserService {
      */
     @Override
     public User getUserEntityById(final Long userId) {
-        return userRepository.getUsersByUserId(userId)
+        return userEntityMapper.getUsersByUserId(userId)
                 .orElseThrow(() -> {
                     throw new ServiceExpection(USER_NOT_FOUND);
                 });

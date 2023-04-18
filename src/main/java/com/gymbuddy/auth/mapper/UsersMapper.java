@@ -24,7 +24,7 @@ public interface UsersMapper {
     MinimalUserDto toMinimalUserDto(User user);
 
     @IterableMapping(qualifiedByName = "minimalUserDtoMapper")
-    List<MinimalUserDto> toMinimalUserDtoList(List<User> users);
+    List<MinimalUserDto> toMinimalUserDtoList(Iterable<User> users);
 
     @Mapping(target = "registrationDate", expression = "java(LocalDate.now())")
     User toUser(CreateUserDto dto);

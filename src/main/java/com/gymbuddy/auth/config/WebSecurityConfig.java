@@ -1,6 +1,6 @@
 package com.gymbuddy.auth.config;
 
-import com.gymbuddy.auth.persistence.repository.UserRepository;
+import com.gymbuddy.auth.persistence.query.UserEntityMapper;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -56,7 +56,7 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public FilterRegistrationBean<JwtAuthenticationFilter> logFilter(final UserRepository userRepository) {
+    public FilterRegistrationBean<JwtAuthenticationFilter> logFilter(final UserEntityMapper userRepository) {
         FilterRegistrationBean<JwtAuthenticationFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(new JwtAuthenticationFilter(userRepository));
         registrationBean.addUrlPatterns(FILTERED_URLS);

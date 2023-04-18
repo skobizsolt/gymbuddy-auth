@@ -3,7 +3,7 @@ package com.gymbuddy.auth.config;
 import com.gymbuddy.auth.exception.Errors;
 import com.gymbuddy.auth.exception.ServiceExpection;
 import com.gymbuddy.auth.persistence.domain.User;
-import com.gymbuddy.auth.persistence.repository.UserRepository;
+import com.gymbuddy.auth.persistence.query.UserEntityMapper;
 import com.gymbuddy.auth.security.JwtAuthentication;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -36,7 +36,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
-    private UserRepository userRepository;
+    private UserEntityMapper userEntityMapper;
 
     private static final String TOKEN_PREFIX = "Bearer ";
     public static final String SECRET_KEY = "GymBuĐĐYTrAin3RAppAuthent1cat1oN2023!";
@@ -72,7 +72,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final JwtClaims jwtClaims = jwtConsumer.processToClaims(substring);
 
         final String subject = jwtClaims.getSubject();
-        final Optional<User> maybeUser = userRepository.getUsersByUsername(subject);
+        final Optional<User> maybeUser = userEntityMapper.getUsersByUsername(subject);
         if (maybeUser.isEmpty()) {
             throw new ChangeSetPersister.NotFoundException();
         }
