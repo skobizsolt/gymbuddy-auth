@@ -19,16 +19,24 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.List;
 
 @Configuration
 @RequiredArgsConstructor
 @EnableConfigurationProperties(FirebaseTokenProperties.class)
 public class JwtTokenAuthorizationFilter extends OncePerRequestFilter {
+
+    private static final List<String> UNFILTERED_URLS = List.of(
+            "/swagger-ui.html",
+            "/v3/api-docs/**",
+            "/swagger-ui/**",
+            "/webjars/swagger-ui/**");
 
     private final FirebaseTokenProperties tokenProperties;
     private final JwtValidationHelper jwtValidationHelper;
@@ -61,6 +69,13 @@ public class JwtTokenAuthorizationFilter extends OncePerRequestFilter {
         authorizeUser(jwtClaims);
 
         filterRequest(request, response, filterChain);
+    }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        final AntPathMatcher pathMatcher = new AntPathMatcher();
+        return UNFILTERED_URLS.stream()
+                .anyMatch(p -> pathMatcher.match(p, request.getServletPath()));
     }
 
     private GrantedAuthority map(final String role) {
