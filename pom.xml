@@ -11,6 +11,7 @@
 	<groupId>com.gymbuddy</groupId>
 	<artifactId>gymbuddy-auth</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
 	<name>gymbuddy-auth</name>
 	<description>Auth service for Gymbuddy</description>
 	<properties>
@@ -94,33 +95,6 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<version>${project.parent.version}</version>
-				<executions>
-					<execution>
-						<id>pre-integration-test</id>
-						<goals>
-							<goal>start</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>post-integration-test</id>
-						<goals>
-							<goal>stop</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<excludes>
-						<exclude>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</exclude>
-					</excludes>
-				</configuration>
-			</plugin>
-			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.8.1</version>
@@ -135,10 +109,6 @@
 						</path>
 						<!-- other annotation processors -->
 					</annotationProcessorPaths>
-					<compilerArgs>
-						<arg>-Amapstruct.defaultComponentModel=spring</arg>
-						<arg>-Amapstruct.defaultInjectionStrategy=constructor</arg>
-					</compilerArgs>
 				</configuration>
 			</plugin>
 		</plugins>
