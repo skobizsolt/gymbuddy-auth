@@ -3,9 +3,9 @@ spring:
     name: gymbuddy-auth
 
 firebase:
-  audience: gymbuddy-b4e20
-  issuer: https://securetoken.google.com/gymbuddy-b4e20
-  public-key-provider: "https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com"
+  audience: ${FIREBASE_PROJECT_ID:gymbuddy-b4e20}
+  issuer: ${FIREBASE_ISSUER:https://securetoken.google.com/gymbuddy-b4e20}
+  public-key-provider: ${FIREBASE_KEYS_URL:https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com}
 
 server:
   port: 8080
