@@ -1,33 +1,48 @@
 package com.gymbuddy.auth.exception;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import org.springframework.http.HttpStatus;
+
+@AllArgsConstructor
+@Getter
 public class ServiceExpection extends RuntimeException{
-    /**
-     * Constructs a new runtime exception with the specified detail message.
-     * The cause is not initialized, and may subsequently be initialized by a
-     * call to {@link #initCause}.
-     *
-     * @param message the detail message. The detail message is saved for
-     *                later retrieval by the {@link #getMessage()} method.
-     */
-    public ServiceExpection(String message) {
-        super(message);
+
+    private final Long errorCode;
+    private final HttpStatus statusCode;
+
+    public ServiceExpection(Throwable cause) {
+        this(null, null, cause);
+    }
+
+    public ServiceExpection(Errors error) { this(error, null, null); }
+
+    public ServiceExpection(Errors error, String message) {
+        this(error, message, null);
+    }
+
+    public ServiceExpection(Errors error, String message, Throwable cause) {
+        this(error.getCause() + (message == null ? "" : " ["+ message +"]"),
+                cause,
+                error.getErrorCode(),
+                error.getHttpStatus());
+    }
+
+    public ServiceExpection(Errors error, Throwable cause) {
+        this(error, null, cause);
     }
 
     /**
-     * Constructs a new runtime exception with the specified detail message and
-     * cause.  <p>Note that the detail message associated with
-     * {@code cause} is <i>not</i> automatically incorporated in
-     * this runtime exception's detail message.
+     * Constructs a new service exception with the specified detail
+     * message, cause, status code.
      *
-     * @param message the detail message (which is saved for later retrieval
-     *                by the {@link #getMessage()} method).
-     * @param cause   the cause (which is saved for later retrieval by the
-     *                {@link #getCause()} method).  (A {@code null} value is
-     *                permitted, and indicates that the cause is nonexistent or
-     *                unknown.)
-     * @since 1.4
+     * @param message   the detail message.
+     * @param cause     the cause.  (A {@code null} value is permitted,
+     *                  and indicates that the cause is nonexistent or unknown.)
      */
-    public ServiceExpection(String message, Throwable cause) {
+    protected ServiceExpection(String message, Throwable cause, Long errorCode, HttpStatus statusCode) {
         super(message, cause);
+        this.errorCode = errorCode;
+        this.statusCode = statusCode;
     }
 }
