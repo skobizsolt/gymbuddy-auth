@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.gymbuddy</groupId>
 	<artifactId>gymbuddy-auth</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>gymbuddy-auth</name>
 	<description>Auth service for Gymbuddy</description>
@@ -114,4 +114,11 @@
 		</plugins>
 	</build>
 
+	<distributionManagement>
+		<repository>
+			<id>github</id>
+			<name>GitHub skobizsolt Apache Maven Packages</name>
+			<url>https://maven.pkg.github.com/skobizsolt/gymbuddy-auth</url>
+		</repository>
+	</distributionManagement>
 </project>
